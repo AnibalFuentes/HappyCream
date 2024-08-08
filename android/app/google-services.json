@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "989118869902",
+    "project_id": "happy-cream",
+    "storage_bucket": "happy-cream.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989118869902:android:90fd2f140a6123e82034df",
+        "android_client_info": {
+          "package_name": "com.example.happycream"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH1RjL0OQclCDSLFoPRimfpA-zG-NGkSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
