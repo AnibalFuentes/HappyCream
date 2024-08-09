@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:happycream/UI/pages/home_page.dart';
 import 'package:happycream/UI/widgets/drawer_widget.dart';
-
+import 'package:happycream/controllers/theme_controller.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -19,55 +17,49 @@ class _NavBarState extends State<NavBar> {
   static const List body = [
     HomePage(),
     //BatchPage(),
-   // AnimalPage(),
+    // AnimalPage(),
     //ProductionPage(),
     // ProfilePage(),
   ];
+  
   void _logout() async {
     try {
-      
-      
-        await FirebaseAuth.instance.signOut();
+      await FirebaseAuth.instance.signOut();
 
-
-       Navigator.pushNamed(context, "/login");
+      Navigator.pushNamed(context, "/login");
       Get.snackbar('', "Sesión cerrada exitosamente");
     } catch (e) {
       Get.snackbar('', "Error al cerrar sesión: $e");
     }
   }
 
-  /*void _profile() {
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ProfilePage()),
-    );
-  }*/
-
-  /*void _trabajador() {
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ProfilePage()),
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*drawer: DrawerWidget(
-        onProfileTap: _profile,
+      drawer: DrawerWidget(
+        onProfileTap: null,
         onSignUp: _logout,
         // onTrabajadorTap: _trabajador,
-      ),*/
+      ),
       appBar: AppBar(
-          backgroundColor: Colors.green.shade800,
+          
           title: const Text(
             "Happy Cream",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white),
           ),
           actions: [
+            IconButton(
+              onPressed: () {
+                Get.find<ThemeController>().toggleTheme();
+                setState(() {
+                  
+                });
+              },
+              icon: Icon(
+                Get.isDarkMode ?Icons.nightlight_round  : Icons.wb_sunny,
+                
+              ),
+            ),
             IconButton(
                 onPressed: _logout,
                 icon: const Icon(Icons.logout),
@@ -78,25 +70,20 @@ class _NavBarState extends State<NavBar> {
         child: body.elementAt(currentIndex),
       ),
       bottomNavigationBar: NavigationBar(
-        
-        
-        indicatorColor: Colors.grey.shade300,
+        //indicatorColor: Colors.grey.shade300,
         destinations: [
           NavigationDestination(
-            
-              icon: Icon(
-                Icons.home_outlined,
-                color: Colors.grey.shade600,
-                size: 30,
-              ),
-              selectedIcon: const Icon(
-                Icons.home,
-                size: 30,
-              ),
-              label: 'Inicio',
-              
-              
-              ),
+            icon: Icon(
+              Icons.home_outlined,
+              color: Colors.grey.shade600,
+              size: 30,
+            ),
+            selectedIcon: const Icon(
+              Icons.home,
+              size: 30,
+            ),
+            label: 'Inicio',
+          ),
           NavigationDestination(
               icon: Icon(
                 Icons.agriculture_outlined,
@@ -108,14 +95,13 @@ class _NavBarState extends State<NavBar> {
                 size: 30,
               ),
               label: 'Finca'),
-
           NavigationDestination(
               icon: Icon(
-                Icons.assignment_outlined, 
+                Icons.assignment_outlined,
                 color: Colors.grey.shade600,
                 size: 30,
-                ),
-                selectedIcon: const Icon(
+              ),
+              selectedIcon: const Icon(
                 Icons.assignment,
                 size: 30,
               ),

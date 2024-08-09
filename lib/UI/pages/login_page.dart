@@ -12,7 +12,7 @@ import 'package:happycream/UI/pages/sign_up_page.dart';
 import 'package:happycream/UI/widgets/form_container_widget.dart';
 import 'package:happycream/UI/widgets/square_title_widget.dart';
 import 'package:happycream/controllers/auth_controller.dart';
-
+import 'package:happycream/controllers/theme_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
- var authenticationController = AuthenticationController.authController;
+  var authenticationController = AuthenticationController.authController;
   @override
   void dispose() {
     _emailController.dispose();
@@ -38,7 +38,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      
+      
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -48,26 +49,16 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Column(
                   children: [
-                    const Gap(100),
+                    Gap(MediaQuery.of(context).size.height * 0.01),
                     Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.05),
-                            spreadRadius: 10,
-                            blurRadius: 10,
-                            offset: const Offset(1, 1),
-                          ),
-                        ],
-                      ),
+                      
                       child: Image.asset(
                         'assets/icon/icon.png',
-                        width: 120,
-                        height: 120,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.4,
                         fit: BoxFit.contain,
                       ),
                     ),
-                    const SizedBox(height: 15),
                     const Text(
                       "Del campo a tu mesa.",
                       style: TextStyle(
@@ -85,7 +76,6 @@ class _LoginPageState extends State<LoginPage> {
                   height: 15,
                 ),
                 FormContainerWidget(
-                  
                   hintText: "Correo electrónico",
                   controller: _emailController,
                   inputType: TextInputType.emailAddress,
@@ -130,15 +120,13 @@ class _LoginPageState extends State<LoginPage> {
                   height: 15,
                 ),
                 GestureDetector(
-                  onTap: (){
-
-                    if(_emailController.text.trim().isNotEmpty && _passwordController.text.trim().isNotEmpty){
-                      
-                    _signIn();
-
-                    }
-                    else{
-                      Get.snackbar('Email/password is missing', 'Please fill a field.');
+                  onTap: () {
+                    if (_emailController.text.trim().isNotEmpty &&
+                        _passwordController.text.trim().isNotEmpty) {
+                      _signIn();
+                    } else {
+                      Get.snackbar(
+                          'Email/password is missing', 'Please fill a field.');
                     }
                   },
                   child: Container(
@@ -195,9 +183,9 @@ class _LoginPageState extends State<LoginPage> {
                     GestureDetector(
                       onTap: _signInWithGoogle,
                       child: const SquareTitleWidget(
+
                           imagePath: "assets/icon/google.png"),
                     ),
-                    
                   ],
                 ),
                 const SizedBox(
@@ -245,10 +233,9 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isSigning = true;
     });
-    
+
     await authenticationController.loginUser(
-      _emailController.text.trim(), 
-      _passwordController.text.trim());
+        _emailController.text.trim(), _passwordController.text.trim());
 
     // String email = _emailController.text;
     // String password = _passwordController.text;
@@ -284,11 +271,10 @@ class _LoginPageState extends State<LoginPage> {
     // } catch (e) {
     //   showToast(message: "Error al iniciar sesión: $e");
     // } finally {
-      setState(() {
-        _isSigning = false;
-      });
-    }
-  
+    setState(() {
+      _isSigning = false;
+    });
+  }
 
   void _signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -326,10 +312,6 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       Get.snackbar('', 'Error al iniciar sesión con Google: $e');
-     
     }
   }
-
-  
-
 }
