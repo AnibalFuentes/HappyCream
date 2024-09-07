@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:happycream/UI/pages/login_page.dart';
 import 'package:happycream/UI/widgets/form_container_widget.dart';
 
-
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
 
@@ -123,7 +122,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
+                                builder: (context) => LoginPage()),
                             (route) => false);
                       },
                       child: Text(
@@ -158,8 +157,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         },
       );
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('','Ha ocurrido un error: ${e.message}');
-      
+      Get.snackbar('', 'Ha ocurrido un error: ${e.message}');
     }
   }
 }

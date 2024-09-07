@@ -39,12 +39,11 @@ class _HeaderDesingState extends State<HeaderDesing> {
                 ),
                 const SizedBox(height: 20),
                 SwipeableButtonView(
-                  
                   onFinish: () async {
                     await Navigator.push(
                       context,
                       PageTransition(
-                        child: const LoginPage(),
+                        child: LoginPage(),
                         type: PageTransitionType.fade,
                       ),
                     );

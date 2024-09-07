@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class DrawerWidget extends StatelessWidget {
   final void Function()? onHomeTap;
   final void Function()? onProfileTap;
@@ -34,7 +33,7 @@ class DrawerWidget extends StatelessWidget {
                       ? NetworkImage('${currentUser.photoURL}')
                       : null,
                   child: currentUser.photoURL == null
-                      ? const Icon(Icons.person, color:Colors.lime,size: 40)
+                      ? const Icon(Icons.person, color: Colors.lime, size: 40)
                       : null,
                 ),
               ),

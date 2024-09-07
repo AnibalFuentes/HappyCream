@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,7 +9,6 @@ import 'package:gap/gap.dart';
 import 'package:happycream/UI/pages/login_page.dart';
 import 'package:happycream/UI/widgets/form_container_widget.dart';
 import 'package:happycream/controllers/auth_controller.dart';
-
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -20,8 +18,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -280,7 +276,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
+                                  builder: (context) => LoginPage()),
                               (route) => false);
                         },
                         child: Text(
@@ -312,16 +308,15 @@ class _SignUpPageState extends State<SignUpPage> {
    String name = _nameController.text;
     int? tamanoFinca = int.tryParse(_tamanoFincaController.text);*/
     await authenticationController.createNewUserAccountAndFarm(
-        //_nameController.text.trim(),
-        //_lastNameController.text.trim(),
-        //null,
-        //null,
-        //_phoneController.text.trim(),
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-        //authenticationController.profileImage,
-        
-        );
+      //_nameController.text.trim(),
+      //_lastNameController.text.trim(),
+      //null,
+      //null,
+      //_phoneController.text.trim(),
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+      //authenticationController.profileImage,
+    );
 
     //User? user = await _auth.signUpWithEmailAndPassword(email, password);
 

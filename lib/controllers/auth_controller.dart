@@ -3,18 +3,18 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:happycream/UI/pages/login_page.dart';
 import 'package:happycream/UI/widgets/navigation_bar.dart';
 import 'package:happycream/models/user.dart' as userModel;
 
-
 import 'package:image_picker/image_picker.dart';
-
 
 class AuthenticationController extends GetxController {
   static AuthenticationController authController = Get.find();
-
+  final Rx<TextEditingController> email = TextEditingController().obs;
+  final Rx<TextEditingController> password = TextEditingController().obs;
 
   late Rx<User?> firebaseCurrentUser;
 
@@ -59,17 +59,17 @@ class AuthenticationController extends GetxController {
   }*/
 
   createNewUserAccountAndFarm(
-      /*String name,
+    /*String name,
       String lastName,
       String? gender,
       DateTime? birthDate,
       String phone,*/
-      String email,
-      String password,
-      //File? img,
-      //String farmName,
-      //int farmExpansion
-      ) async {
+    String email,
+    String password,
+    //File? img,
+    //String farmName,
+    //int farmExpansion
+  ) async {
     try {
       //auth user with email and password
       UserCredential credential = await FirebaseAuth.instance
@@ -106,7 +106,7 @@ class AuthenticationController extends GetxController {
 
       Get.snackbar('Account Cration Succesfully', 'Congratulations');
       FirebaseAuth.instance.signOut();
-      Get.to(const LoginPage());
+      Get.to(LoginPage());
     } catch (e) {
       Get.snackbar('Account Cration Unsuccesfull', 'Error ocurred $e');
     }
@@ -117,7 +117,7 @@ class AuthenticationController extends GetxController {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailUser, password: passwordUser);
       Get.snackbar('Logged-in successful', "you're logged-in successfully");
-      Get.to(() => const NavBar());
+      Get.to(() => NavBar());
     } catch (e) {
       Get.snackbar('Login Unsuccessful', 'Error ocurred: $e');
     }
@@ -125,17 +125,26 @@ class AuthenticationController extends GetxController {
 
   checkIfUserIsLoggedIn(User? currentUser) async {
     if (currentUser == null) {
-      Get.to(() => const LoginPage());
+      Get.to(() => LoginPage());
     } else {
-      Get.to(() => const NavBar());
+      Get.to(() => NavBar());
+    }
+  }
+
+  logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Get.put(LoginPage());
+
+      Get.snackbar('', "Sesión cerrada exitosamente");
+    } catch (e) {
+      Get.snackbar('', "Error al cerrar sesión: $e");
     }
   }
 
   @override
-  void onReady(){
-
+  void onReady() {
     super.onReady();
-
 
     firebaseCurrentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
     firebaseCurrentUser.bindStream(FirebaseAuth.instance.authStateChanges());
