@@ -15,6 +15,10 @@ class ProductController extends GetxController {
   final db = FirebaseFirestore.instance;
   final RxString categoryId = ''.obs;
   final RxBool isLoading = false.obs; // Añadido para el estado de carga
+  final RxBool topping = false.obs; // Añadido para el estado de carga
+  final RxInt cTopping = 0.obs; // Añadido para el estado de carga
+  final RxBool syrup = false.obs; // Añadido para el estado de carga
+  final RxInt cSyrup = 0.obs; // Añadido para el estado de carga
 
   var tProducts = 0.obs;
   String imgURL = '';
@@ -31,6 +35,10 @@ class ProductController extends GetxController {
         id: '',
         name: name.value.text.toLowerCase(),
         state: true,
+        topping: topping.value,
+        syrup: syrup.value,
+        cTopping: cTopping.value,
+        cSyrup: cSyrup.value,
         description: description.value.text.toLowerCase(),
         image: imgURL,
         categoryId: categoryId,
@@ -42,6 +50,10 @@ class ProductController extends GetxController {
             id: docRef.id,
             name: product.name,
             state: product.state,
+            topping: product.topping,
+            syrup: product.syrup,
+            cTopping: product.cTopping,
+            cSyrup: product.cSyrup,
             description: product.description,
             image: product.image,
             categoryId: product.categoryId,
@@ -92,6 +104,10 @@ class ProductController extends GetxController {
     String newDescription,
     String newImage,
     double newPrice,
+    bool newTopping,
+    bool newSyrup,
+    int newCtopping,
+    int newCsyrup,
   ) async {
     try {
       // Actualiza los campos del producto en Firestore
@@ -100,6 +116,10 @@ class ProductController extends GetxController {
         'description': newDescription.toLowerCase(),
         'image': newImage,
         'price': newPrice,
+        'topping': newTopping,
+        'syrup': newSyrup,
+        'cTopping': newCtopping,
+        'cSyrup': newCsyrup
       }).then((_) {
         // Actualiza el producto en la lista observable
         int index =
@@ -111,6 +131,10 @@ class ProductController extends GetxController {
             description: newDescription.toLowerCase(),
             image: newImage,
             state: productList[index].state,
+            topping: newTopping,
+            syrup: newSyrup,
+            cTopping: newCtopping,
+            cSyrup: newCsyrup,
             price: newPrice,
             categoryId: productList[index].categoryId,
           );
@@ -144,6 +168,10 @@ class ProductController extends GetxController {
             id: productId,
             name: productList[index].name.toLowerCase(),
             state: newState,
+            topping: productList[index].topping,
+            syrup: productList[index].syrup,
+            cTopping: productList[index].cTopping,
+            cSyrup: productList[index].cSyrup,
             description: productList[index].description.toLowerCase(),
             image: productList[index].image,
             categoryId: productList[index].categoryId,

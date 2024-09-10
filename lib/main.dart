@@ -9,6 +9,7 @@ import 'package:happycream/UI/pages/sign_up_page.dart';
 import 'package:happycream/UI/widgets/navigation_bar.dart';
 import 'package:happycream/UI/widgets/splash_screen.dart';
 import 'package:happycream/controllers/auth_controller.dart';
+import 'package:happycream/controllers/syrup_controller.dart';
 import 'package:happycream/controllers/topping_controller.dart';
 
 // Controladores que has mencionado anteriormente.
@@ -20,7 +21,6 @@ import 'controllers/product_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inicialización de Firebase con manejo de errores.
   try {
     if (kIsWeb) {
       await Firebase.initializeApp(
@@ -40,20 +40,15 @@ void main() async {
     debugPrint('Error initializing Firebase: $e');
   }
 
-  // Inyección de controladores con GetX.
-  Get.put(AuthenticationController());
   Get.put(ThemeController());
+  Get.put(AuthenticationController());
   Get.put(CategoryController());
   Get.put(ProductController());
   Get.put(ToppingController());
 
-  runApp(
-    DevicePreview(
-      enabled:
-          !kReleaseMode, // Activa DevicePreview solo en modo de desarrollo.
-      builder: (context) => const MyApp(),
-    ),
-  );
+  Get.put(SyrupController());
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -61,25 +56,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Obtén el controlador de tema para manejar los temas claros y oscuros.
     final ThemeController themeController = Get.find();
 
     return Obx(() {
       return GetMaterialApp(
-        builder: DevicePreview.appBuilder, // Integración con DevicePreview.
         debugShowCheckedModeBanner: false,
         title: 'Happy Cream',
         themeMode: themeController.themeMode.value,
         theme: themeController.lightTheme,
         darkTheme: themeController.darkTheme,
-        locale:
-            DevicePreview.locale(context), // Para probar diferentes locales.
         routes: {
-          '/': (context) =>
-              SplashScreen(child: NavBar()), // Pantalla de inicio.
-          '/login': (context) => LoginPage(),
-          '/signUp': (context) => const SignUpPage(),
-          // Agrega más rutas según tu necesidad.
+          '/': (context) => SplashScreen(child: LoginPage()),
         },
       );
     });

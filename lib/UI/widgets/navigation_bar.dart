@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:happycream/UI/pages/add_category.dart';
+import 'package:happycream/UI/pages/add_syrup.dart';
 import 'package:happycream/UI/pages/add_topping.dart';
 import 'package:happycream/UI/pages/category_page.dart';
 import 'package:happycream/UI/pages/home_page.dart';
+import 'package:happycream/UI/pages/syrup_page.dart';
 import 'package:happycream/UI/pages/topping_page.dart';
 import 'package:happycream/UI/widgets/drawer_widget.dart';
 import 'package:happycream/controllers/auth_controller.dart';
@@ -19,7 +21,8 @@ class NavBar extends StatelessWidget {
   static const List<Widget> body = [
     HomePage(),
     CategoryPage(),
-    ToppingPage()
+    ToppingPage(),
+    SyrupPage()
     // BatchPage(),
     // AnimalPage(),
     // ProductionPage(),
@@ -90,12 +93,12 @@ class NavBar extends StatelessWidget {
               ),
               NavigationDestination(
                 icon: Icon(
-                  Icons.paste_outlined,
+                  Icons.restaurant_menu,
                   color: Colors.grey.shade600,
                   size: 30,
                 ),
                 selectedIcon: const Icon(
-                  Icons.paste,
+                  Icons.restaurant_menu,
                   size: 30,
                 ),
                 label: 'Productos',
@@ -111,6 +114,18 @@ class NavBar extends StatelessWidget {
                   size: 30,
                 ),
                 label: 'Toppings',
+              ),
+              NavigationDestination(
+                icon: Icon(
+                  Icons.water_drop_outlined,
+                  color: Colors.grey.shade600,
+                  size: 30,
+                ),
+                selectedIcon: const Icon(
+                  Icons.water_drop,
+                  size: 30,
+                ),
+                label: 'Salsas',
               ),
             ],
             selectedIndex: currentIndex.value,
@@ -131,9 +146,12 @@ class NavBar extends StatelessWidget {
                     case 2:
                       return showToppingDialog(
                           context: context, isEditing: false);
+                    case 3:
+                      return showSyrupDialog(
+                          context: context, isEditing: false);
                   }
                 },
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
       );
     });

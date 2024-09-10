@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:happycream/controllers/product_controller.dart';
-import 'package:happycream/UI/pages/add_product.dart';
+import 'package:happycream/UI/pages/add_syrup.dart';
+import 'package:happycream/UI/pages/add_topping.dart';
+import 'package:happycream/UI/widgets/alert_dialog_widget.dart';
+import 'package:happycream/controllers/syrup_controller.dart';
 
-class ProductPage extends StatelessWidget {
-  final String categoryId;
-  final String categoryName;
-
-  const ProductPage(
-      {super.key, required this.categoryId, required this.categoryName});
+class SyrupPage extends StatelessWidget {
+  const SyrupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ProductController controller = Get.find<ProductController>();
-
-    controller.categoryId.value = categoryId;
+    final SyrupController controller = Get.find<SyrupController>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(categoryName.toUpperCase()),
-      ),
       body: Obx(
         () {
           if (controller.isLoading.value) {
@@ -27,7 +20,8 @@ class ProductPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          if (controller.productList.isEmpty) {
+
+          if (controller.syrupList.isEmpty) {
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min, // Para centrar verticalmente
@@ -41,13 +35,13 @@ class ProductPage extends StatelessWidget {
                       Icons.add,
                       size: 45,
                     ),
-                    onPressed: () => showProductDialog(
+                    onPressed: () => showToppingDialog(
                       context: context,
                       isEditing: false,
                     ),
                   ),
                   const Text(
-                    'Añade un producto',
+                    'Añade una salsa',
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -59,12 +53,10 @@ class ProductPage extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: ListView(
-                  children: controller.productList.map((product) {
+                  children: controller.syrupList.map((syrup) {
                     return Card(
                       child: Dismissible(
-                        key: ValueKey(product.id),
-                        direction: DismissDirection
-                            .horizontal, // Permitir deslizamiento en ambas direcciones
+                        key: ValueKey(syrup.id),
                         background: Container(
                           color: Colors.blue,
                           alignment: Alignment.centerLeft,
@@ -81,10 +73,10 @@ class ProductPage extends StatelessWidget {
                         confirmDismiss: (direction) async {
                           if (direction == DismissDirection.startToEnd) {
                             // Acción para editar
-                            final bool? shouldDismiss = await showProductDialog(
+                            final bool? shouldDismiss = await showSyrupDialog(
                               context: context,
                               isEditing: true,
-                              product: product,
+                              syrup: syrup,
                             );
                             return shouldDismiss ?? false;
                           } else if (direction == DismissDirection.endToStart) {
@@ -92,31 +84,24 @@ class ProductPage extends StatelessWidget {
                             final bool shouldDelete = await showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Eliminar producto'),
-                                  content: Text(
-                                    '¿Estás seguro de que deseas eliminar el producto ${product.name}?',
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(false);
-                                      },
-                                      child: const Text('Cancelar'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(true);
-                                      },
-                                      child: const Text('Eliminar'),
+                                return AlertDialogWidget(
+                                  title: 'Eliminar salsa',
+                                  contentWidgets: [
+                                    Text(
+                                      '¿Estás seguro de que deseas eliminar la salsa ${syrup.name}?',
                                     ),
                                   ],
+                                  onCancel: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  onConfirm: () {
+                                    Navigator.of(context).pop(true);
+                                  },
                                 );
                               },
                             );
                             if (shouldDelete) {
-                              controller.deleteProduct(
-                                  product.id, product.name);
+                              controller.deleteSyrup(syrup.id, syrup.name);
                             }
                             return shouldDelete;
                           }
@@ -124,10 +109,10 @@ class ProductPage extends StatelessWidget {
                         },
                         child: ExpansionTile(
                             subtitle: Text(
-                              product.state ? 'Visible' : 'Oculto',
+                              syrup.state ? 'Visible' : 'Oculto',
                               style: TextStyle(
                                   color:
-                                      product.state ? Colors.green : Colors.red,
+                                      syrup.state ? Colors.green : Colors.red,
                                   fontWeight: FontWeight.bold),
                             ),
                             leading: GestureDetector(
@@ -137,31 +122,21 @@ class ProductPage extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              product.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                              syrup.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             children: [
                               ListTile(
                                 title: Text(
-                                  product.description.toString(),
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                                subtitle: Text(
-                                  '\$ ${product.price.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14),
-                                ),
+                                    '\$ ${syrup.price.toStringAsFixed(2)}'),
                                 trailing: Switch(
                                   activeColor: Colors.grey,
                                   activeTrackColor: Colors.lightGreen,
-                                  value: product.state,
+                                  value: syrup.state,
                                   onChanged: (newState) {
-                                    controller.updateProductState(
-                                        product.id, newState);
+                                    controller.updateSyrupState(
+                                        syrup.id, newState);
                                   },
                                 ),
                               ),
@@ -174,13 +149,6 @@ class ProductPage extends StatelessWidget {
             ],
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showProductDialog(
-              context: context, isEditing: false, categoryId: categoryId);
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

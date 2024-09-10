@@ -19,7 +19,7 @@ class DrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser!;
     return Drawer(
-      backgroundColor: Colors.green.shade800,
+      // backgroundColor: Colors.green.shade800,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -33,7 +33,7 @@ class DrawerWidget extends StatelessWidget {
                       ? NetworkImage('${currentUser.photoURL}')
                       : null,
                   child: currentUser.photoURL == null
-                      ? const Icon(Icons.person, color: Colors.lime, size: 40)
+                      ? const Icon(Icons.person, size: 40)
                       : null,
                 ),
               ),
@@ -69,27 +69,29 @@ class DrawerWidget extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.green.shade50),
+                    borderRadius: BorderRadius.circular(100),
+                    // color: Colors.green.shade50
+                  ),
                   child: const Icon(
                     Icons.person,
-                    color: Colors.lime,
+                    // color: Colors.lime,
                   ),
                 ),
                 title: const Text(
                   'Perfil',
-                  style: TextStyle(color: Colors.white),
+                  // style: TextStyle(color: Colors.white),
                 ),
                 trailing: Container(
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.green.shade500),
+                    borderRadius: BorderRadius.circular(100),
+                    // color: Colors.green.shade500
+                  ),
                   child: const Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 18,
-                    color: Colors.white,
+                    // color: Colors.white,
                   ),
                 ),
               ),
@@ -140,12 +142,12 @@ class DrawerWidget extends StatelessWidget {
                         color: Colors.green.shade50),
                     child: const Icon(
                       Icons.logout_rounded,
-                      color: Colors.amber,
+                      // color: Colors.amber,
                     ),
                   ),
                   title: const Text(
                     'Cerrar Sesión',
-                    style: TextStyle(color: Colors.white),
+                    // style: TextStyle(color: Colors.white),
                   ))),
         ],
       ),

@@ -39,44 +39,44 @@ class LoginPage extends StatelessWidget {
     _isSigning.value = !_isSigning.value;
   }
 
-  void _signInWithGoogle(BuildContext context) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+  // void _signInWithGoogle(BuildContext context) async {
+  //   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
+  //   try {
+  //     final GoogleSignInAccount? googleSignInAccount =
+  //         await googleSignIn.signIn();
 
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+  //     if (googleSignInAccount != null) {
+  //       final GoogleSignInAuthentication googleSignInAuthentication =
+  //           await googleSignInAccount.authentication;
 
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
+  //       final AuthCredential credential = GoogleAuthProvider.credential(
+  //         idToken: googleSignInAuthentication.idToken,
+  //         accessToken: googleSignInAuthentication.accessToken,
+  //       );
 
-        UserCredential userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
+  //       UserCredential userCredential =
+  //           await _firebaseAuth.signInWithCredential(credential);
 
-        // Verificar el estado del usuario en Firestore
-        DocumentSnapshot userDoc = await _firestore
-            .collection('usuarios')
-            .doc(userCredential.user?.uid)
-            .get();
+  //       // Verificar el estado del usuario en Firestore
+  //       DocumentSnapshot userDoc = await _firestore
+  //           .collection('usuarios')
+  //           .doc(userCredential.user?.uid)
+  //           .get();
 
-        if (userDoc.exists &&
-            userDoc.data() != null &&
-            userDoc['state'] == true) {
-          Navigator.pushNamed(context, "/home");
-        } else {
-          Get.snackbar('', 'Usuario inactivo. Contacta al administrador.');
-          await _firebaseAuth.signOut(); // Cerrar sesión del usuario inactivo
-        }
-      }
-    } catch (e) {
-      Get.snackbar('', 'Error al iniciar sesión con Google: $e');
-    }
-  }
+  //       if (userDoc.exists &&
+  //           userDoc.data() != null &&
+  //           userDoc['state'] == true) {
+  //         Navigator.pushNamed(context, "/home");
+  //       } else {
+  //         Get.snackbar('', 'Usuario inactivo. Contacta al administrador.');
+  //         await _firebaseAuth.signOut(); // Cerrar sesión del usuario inactivo
+  //       }
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar('', 'Error al iniciar sesión con Google: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,7 @@ class LoginPage extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
-                          "ó continua con",
+                          "ó ",
                           style: TextStyle(color: Colors.grey[700]),
                         )),
                     Expanded(
@@ -207,43 +207,43 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _signInWithGoogle(context),
-                      child: const SquareTitleWidget(
-                        
-                        imagePath: "assets/icon/google.png",
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "No tienes cuenta? ",
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUpPage()),
-                          (route) => false,
-                        );
-                      },
-                      child: const Text(
-                        "Regístrate",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () => _signInWithGoogle(context),
+                //       child: const SquareTitleWidget(
+
+                //         imagePath: "assets/icon/google.png",
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 15),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text(
+                //       "No tienes cuenta? ",
+                //     ),
+                //     GestureDetector(
+                //       onTap: () {
+                //         Navigator.pushAndRemoveUntil(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => const SignUpPage()),
+                //           (route) => false,
+                //         );
+                //       },
+                //       child: const Text(
+                //         "Regístrate",
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

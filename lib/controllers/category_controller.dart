@@ -5,10 +5,11 @@ import 'package:happycream/models/category.dart';
 
 class CategoryController extends GetxController {
   final Rx<TextEditingController> name = TextEditingController().obs;
+  final Rx<TextEditingController> description = TextEditingController().obs;
   static CategoryController categoryController = Get.find();
   final RxList<Category> categoryList = <Category>[].obs;
   final db = FirebaseFirestore.instance;
-  final RxBool isLoading = false.obs; 
+  final RxBool isLoading = false.obs;
 
   @override
   void onInit() {
@@ -22,6 +23,7 @@ class CategoryController extends GetxController {
         id: '', // No necesitas el id aquí, se genera automáticamente en Firestore
         tProduct: 0,
         name: name.value.text.toLowerCase(),
+        description: description.value.text.toLowerCase(),
         state: true,
       );
 
@@ -29,7 +31,11 @@ class CategoryController extends GetxController {
       await db.collection('categories').add(category.toMap()).then((docRef) {
         // Actualiza la lista después de añadir la categoría
         categoryList.add(Category(
-            id: docRef.id, name: category.name, tProduct: category.tProduct,state: category.state));
+            id: docRef.id,
+            name: category.name,
+            tProduct: category.tProduct,
+            state: category.state,
+            description: category.description));
         Get.snackbar(
           'Categoría Añadida',
           'La categoría ${name.value.text} ha sido añadida exitosamente',
@@ -44,8 +50,8 @@ class CategoryController extends GetxController {
     }
   }
 
-   getCategories() async {
-    isLoading.value = true; 
+  getCategories() async {
+    isLoading.value = true;
     try {
       var categories = await db.collection('categories').get();
       categoryList.clear();
@@ -58,26 +64,28 @@ class CategoryController extends GetxController {
         'Error',
         'Hubo un problema al obtener las categorías: ${e.toString()}',
       );
-    }finally{
+    } finally {
       isLoading.value = false;
     }
-    
   }
 
-  void updateCategoryName(String categoryId, String newName) async {
+  void updateCategoryName(
+      String categoryId, String newName, String newDescription) async {
     try {
       // Actualiza solo el nombre de la categoría en Firestore
       await db.collection('categories').doc(categoryId).update({
         'name': newName.toLowerCase(),
+        'description': newDescription.toLowerCase(),
       }).then((_) {
         // Actualiza solo el nombre en la lista observable
         int index =
             categoryList.indexWhere((category) => category.id == categoryId);
         if (index != -1) {
           categoryList[index] = Category(
-            tProduct:categoryList[index].tProduct ,
+            tProduct: categoryList[index].tProduct,
             id: categoryId,
             name: newName.toLowerCase(),
+            description: newDescription.toLowerCase(),
             state: categoryList[index].state, // Mantiene el estado existente
           );
           categoryList
@@ -110,15 +118,12 @@ class CategoryController extends GetxController {
             id: categoryId,
             tProduct: categoryList[index].tProduct,
             name: categoryList[index].name.toLowerCase(),
+            description: categoryList[index].description?.toLowerCase(),
             state: newState,
           );
           categoryList
               .refresh(); // Refresca la lista para actualizar la interfaz
         }
-        Get.snackbar(
-          'Estado Actualizado',
-          'El nombre de la categoría ha sido actualizado a ',
-        );
       });
     } catch (e) {
       Get.snackbar(
@@ -128,7 +133,7 @@ class CategoryController extends GetxController {
     }
   }
 
- deleteCategory(String categoryId, String name) async {
+  deleteCategory(String categoryId, String name) async {
     try {
       await db.collection('categories').doc(categoryId).delete().then((_) {
         // Actualiza la lista al eliminar la categoría

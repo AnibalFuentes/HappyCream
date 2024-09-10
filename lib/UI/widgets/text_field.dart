@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String hintText;
+  final int? maxline;
+  final int? maxlength;
+
+  final List<TextInputFormatter>? formater;
   final String? Function(String?)? validator;
   final TextInputType keyboardType; // Añade esta propiedad
 
@@ -12,6 +17,9 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     required this.labelText,
     required this.hintText,
+    this.formater,
+    this.maxline,
+    this.maxlength,
     this.validator,
     this.keyboardType = TextInputType.text, // Valor por defecto
   }) : super(key: key);
@@ -23,8 +31,10 @@ class CustomTextFormField extends StatelessWidget {
     final borderColor = theme.colorScheme.primary;
 
     return TextFormField(
+      inputFormatters: formater,
       style: textStyle,
-      maxLength: 30,
+      maxLines: maxline,
+      maxLength: maxlength,
       cursorColor: theme.colorScheme.onSurface,
       controller: controller,
       keyboardType: keyboardType, // Usa el keyboardType aquí
@@ -43,11 +53,11 @@ class CustomTextFormField extends StatelessWidget {
             color: theme.colorScheme.onSurface.withOpacity(0.5)),
         border: OutlineInputBorder(
           borderSide: BorderSide(color: borderColor),
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(40),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: borderColor),
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(40),
         ),
       ),
       validator: validator,

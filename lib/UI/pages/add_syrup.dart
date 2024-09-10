@@ -3,21 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:happycream/UI/widgets/text_field.dart';
+import 'package:happycream/controllers/syrup_controller.dart';
 import 'package:happycream/controllers/topping_controller.dart';
 import 'package:happycream/UI/widgets/alert_dialog_widget.dart';
-import 'package:happycream/models/topping.dart';
+import 'package:happycream/models/syrup.dart';
 
-showToppingDialog(
-    {required BuildContext context,
-    required bool isEditing,
-    Topping? topping}) {
-  final ToppingController controller = Get.find<ToppingController>();
+showSyrupDialog(
+    {required BuildContext context, required bool isEditing, Syrup? syrup}) {
+  final SyrupController controller = Get.find<SyrupController>();
 
-  if (isEditing && topping != null) {
+  if (isEditing && syrup != null) {
     // Inicializa los controladores con los valores actuales del producto para edición
-    controller.name.value.text = topping.name;
+    controller.name.value.text = syrup.name;
 
-    controller.price.value.text = topping.price.toString();
+    controller.price.value.text = syrup.price.toString();
   } else {
     // Limpia los controladores para agregar un nuevo producto
     controller.name.value.clear();
@@ -29,7 +28,7 @@ showToppingDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialogWidget(
-        title: isEditing ? 'Editar Topping' : 'Añadir Topping',
+        title: isEditing ? 'Editar salsa' : 'Añadir salsa',
         contentWidgets: [
           CustomTextFormField(
             keyboardType: TextInputType.text,
@@ -55,17 +54,17 @@ showToppingDialog(
           final newImage = controller.imgURL;
 
           if (newName.isNotEmpty) {
-            if (isEditing && topping != null) {
+            if (isEditing && syrup != null) {
               // Actualiza el producto existente
-              controller.updateTopping(
-                topping.id,
+              controller.updateSyrup(
+                syrup.id,
                 newName,
                 newImage,
                 newPrice,
               );
             } else {
               // Añade un nuevo producto
-              controller.addTopping();
+              controller.addSyrup();
             }
             Navigator.of(context).pop(); // Cierra el diálogo
           } else {

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:happycream/models/product.dart';
 import 'package:happycream/models/topping.dart';
 
 class ToppingController extends GetxController {
@@ -11,7 +10,7 @@ class ToppingController extends GetxController {
   final RxList<Topping> toppingList = <Topping>[].obs;
   final db = FirebaseFirestore.instance;
 
-  final RxBool isLoading = false.obs; // Añadido para el estado de carga
+  final RxBool isLoading = false.obs;
 
   var tTopings = 0.obs;
   String imgURL = '';
@@ -54,7 +53,7 @@ class ToppingController extends GetxController {
   }
 
   void getToppings() async {
-    isLoading.value = true; // Comienza la carga
+    isLoading.value = true;
     try {
       var toppings = await db.collection('toppings').get();
       toppingList.clear();
@@ -67,7 +66,7 @@ class ToppingController extends GetxController {
         'Hubo un problema al obtener los productos: ${e.toString()}',
       );
     } finally {
-      isLoading.value = false; // Termina la carga
+      isLoading.value = false;
     }
   }
 
@@ -78,13 +77,11 @@ class ToppingController extends GetxController {
     double newPrice,
   ) async {
     try {
-      // Actualiza los campos del producto en Firestore
       await db.collection('toppings').doc(toppingId).update({
         'name': newName.toLowerCase(),
         'image': newImage,
         'price': newPrice,
       }).then((_) {
-        // Actualiza el producto en la lista observable
         int index =
             toppingList.indexWhere((topping) => topping.id == toppingId);
         if (index != -1) {
@@ -95,13 +92,8 @@ class ToppingController extends GetxController {
             state: toppingList[index].state,
             price: newPrice,
           );
-          toppingList
-              .refresh(); // Refresca la lista para actualizar la interfaz
+          toppingList.refresh();
         }
-        Get.snackbar(
-          'topping Actualizado',
-          'El topping ha sido actualizado a $newName',
-        );
       });
     } catch (e) {
       Get.snackbar(
@@ -113,11 +105,9 @@ class ToppingController extends GetxController {
 
   void updateToopingState(String toppingId, bool newState) async {
     try {
-      // Actualiza solo el nombre de la categoría en Firestore
       await db.collection('toppings').doc(toppingId).update({
         'state': newState,
       }).then((_) {
-        // Actualiza solo el nombre en la lista observable
         int index =
             toppingList.indexWhere((product) => product.id == toppingId);
         if (index != -1) {
@@ -125,20 +115,11 @@ class ToppingController extends GetxController {
             id: toppingId,
             name: toppingList[index].name.toLowerCase(),
             state: newState,
-
             image: toppingList[index].image,
-
-            price: toppingList[index]
-                .price
-                .toDouble(), // Mantiene el estado existente,
+            price: toppingList[index].price.toDouble(),
           );
-          toppingList
-              .refresh(); // Refresca la lista para actualizar la interfaz
+          toppingList.refresh();
         }
-        Get.snackbar(
-          'Estado Actualizado',
-          'El estado del topping ha sido actualizado',
-        );
       });
     } catch (e) {
       Get.snackbar(
@@ -151,7 +132,6 @@ class ToppingController extends GetxController {
   void deleteTopping(String toppingId, String name) async {
     try {
       await db.collection('toppings').doc(toppingId).delete().then((_) {
-        // Actualiza la lista al eliminar la categoría
         toppingList.removeWhere((topping) => topping.id == toppingId);
         Get.snackbar(
           'topping Eliminado',

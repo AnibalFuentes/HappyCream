@@ -25,14 +25,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.green.shade800,
-        title: const Text(
-          "Moo",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -99,7 +91,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.green.shade800,
+                    // color: Colors.green.shade800,
                   ),
                   child: const Center(
                     child: Text("Restablecer contraseña",
@@ -128,7 +120,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       child: Text(
                         "Regresar",
                         style: TextStyle(
-                          color: Colors.green.shade800,
+                          // color: Colors.green.shade800,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

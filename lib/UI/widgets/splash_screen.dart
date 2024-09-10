@@ -13,10 +13,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushAndRemoveUntil(
+      // Verificar si el estado está montado antes de navegar
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => widget.child!),
-          (route) => false);
+          (route) => false,
+        );
+      }
     });
   }
 

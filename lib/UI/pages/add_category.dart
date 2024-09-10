@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:happycream/UI/widgets/text_field.dart';
 import 'package:happycream/controllers/category_controller.dart';
 import 'package:happycream/models/category.dart';
 import 'package:happycream/UI/widgets/alert_dialog_widget.dart';
 
- showCategoryDialog({
+showCategoryDialog({
   required BuildContext context,
   required bool isEditing,
   Category? category,
@@ -14,9 +16,11 @@ import 'package:happycream/UI/widgets/alert_dialog_widget.dart';
   if (isEditing) {
     // Inicializa el controlador con el nombre actual para edición
     controller.name.value.text = category?.name ?? '';
+    controller.description.value.text = category?.description ?? '';
   } else {
     // Limpia el controlador para nueva categoría
     controller.name.value.clear();
+    controller.description.value.clear();
   }
 
   showDialog(
@@ -25,21 +29,29 @@ import 'package:happycream/UI/widgets/alert_dialog_widget.dart';
       return AlertDialogWidget(
         title: isEditing ? 'Editar Categoría' : 'Añadir Categoría',
         contentWidgets: [
-          TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Ingrese el nombre',
-              labelText: 'Nombre',
-            ),
+          CustomTextFormField(
+            hintText: 'Ingrese el nombre',
+            labelText: 'Nombre',
             controller: controller.name.value,
+          ),
+          const Gap(15),
+          CustomTextFormField(
+            hintText: 'Ingrese la descripcion',
+            labelText: 'Descripcion',
+            keyboardType: TextInputType.multiline,
+            controller: controller.description.value,
+            maxline: 5,
           ),
         ],
         onConfirm: () {
           final newName = controller.name.value.text.trim();
+          final newDescription = controller.description.value.text.trim();
           if (newName.isNotEmpty) {
             if (isEditing) {
               // Actualiza la categoría
               if (category != null) {
-                controller.updateCategoryName(category.id, newName);
+                controller.updateCategoryName(
+                    category.id, newName, newDescription);
               }
             } else {
               // Añade una nueva categoría
